@@ -1,6 +1,6 @@
 #include "dll.h"
 
-void DLL_InitList(dll_t* list)
+void DLL_InitList(dll_t *list)
 {
 	if (list == NULL)
 	{
@@ -11,7 +11,7 @@ void DLL_InitList(dll_t* list)
 	list->tail = NULL;
 }
 
-void DLL_PushFront(dll_t* list, void* node)
+void DLL_PushFront(dll_t *list, void *node)
 {
 	if (list == NULL || node == NULL
 #if DLL_CHECK_IF_NODE_EXISTS_BEFORE_OPERATION == 1
@@ -37,7 +37,7 @@ void DLL_PushFront(dll_t* list, void* node)
 	list->head = n;
 }
 
-void* DLL_TopFront(dll_t* list)
+void *DLL_TopFront(dll_t *list)
 {
 	if (list == NULL)
 	{
@@ -47,7 +47,7 @@ void* DLL_TopFront(dll_t* list)
 	return (void *)list->head;
 }
 
-void* DLL_PopFront(dll_t* list)
+void *DLL_PopFront(dll_t *list)
 {
 	if (list == NULL || list->head == NULL /* Empty list*/)
 	{
@@ -64,9 +64,9 @@ void* DLL_PopFront(dll_t* list)
 	return (void *)n;
 }
 
-void DLL_PushBack(dll_t* list, void* node)
+void DLL_PushBack(dll_t *list, void *node)
 {
-if (list == NULL || node == NULL
+	if (list == NULL || node == NULL
 #if DLL_CHECK_IF_NODE_EXISTS_BEFORE_OPERATION == 1
 		|| DLL_Find(list, node) /* node is already in the list */
 #endif
@@ -89,7 +89,7 @@ if (list == NULL || node == NULL
 	list->tail = n;
 }
 
-void* DLL_TopBack(dll_t* list)
+void *DLL_TopBack(dll_t *list)
 {
 	if (list == NULL)
 	{
@@ -99,7 +99,7 @@ void* DLL_TopBack(dll_t* list)
 	return (void *)list->tail;
 }
 
-void* DLL_PopBack(dll_t* list)
+void *DLL_PopBack(dll_t *list)
 {
 	if (list == NULL || list->head == NULL /* Empty list*/)
 	{
@@ -121,7 +121,7 @@ void* DLL_PopBack(dll_t* list)
 	return n;
 }
 
-void DLL_AddBefore (dll_t* list, void* node, void* node_to_be_added)
+void DLL_AddBefore(dll_t *list, void *node, void *node_to_be_added)
 {
 	if (list == NULL || node == NULL || node_to_be_added == NULL
 #if DLL_CHECK_IF_NODE_EXISTS_BEFORE_OPERATION == 1
@@ -146,10 +146,10 @@ void DLL_AddBefore (dll_t* list, void* node, void* node_to_be_added)
 	if (list->head == n)
 	{
 		list->head = n_to_be_added;
-	}	
+	}
 }
 
-void DLL_AddAfter (dll_t* list, void* node, void* node_to_be_added)
+void DLL_AddAfter(dll_t *list, void *node, void *node_to_be_added)
 {
 	if (list == NULL || node == NULL || node_to_be_added == NULL
 #if DLL_CHECK_IF_NODE_EXISTS_BEFORE_OPERATION == 1
@@ -168,7 +168,7 @@ void DLL_AddAfter (dll_t* list, void* node, void* node_to_be_added)
 	if (n->next != NULL)
 	{
 		n->next->prev = n_to_be_added;
-	}	
+	}
 	n->next = n_to_be_added;
 
 	if (list->tail = n)
@@ -177,7 +177,7 @@ void DLL_AddAfter (dll_t* list, void* node, void* node_to_be_added)
 	}
 }
 
-bool DLL_Find (dll_t* list, void* node)
+bool DLL_Find(dll_t *list, void *node)
 {
 	if (list != NULL && node != NULL)
 	{
@@ -192,9 +192,9 @@ bool DLL_Find (dll_t* list, void* node)
 	return false;
 }
 
-void DLL_Erase (dll_t* list, void* node)
+void DLL_Erase(dll_t *list, void *node)
 {
-		if (list == NULL || node == NULL || list->head == NULL	/* Empty list */
+	if (list == NULL || node == NULL || list->head == NULL /* Empty list */
 #if DLL_CHECK_IF_NODE_EXISTS_BEFORE_OPERATION == 1
 		|| DLL_Find(list, node) == false /* node is NOT in the list */
 #endif
@@ -204,35 +204,44 @@ void DLL_Erase (dll_t* list, void* node)
 	}
 
 	dll_node_t *n = (dll_node_t *)node;
-	
+
 	/*Remove node from a list algo */
-	/*Ref: https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux */	
+	/*Ref: https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux */
 
 	dll_node_t *prev = NULL, *walk = list->head;
-	
+
 	while (walk != n)
 	{
 		prev = walk;
 		walk = walk->next;
 	}
-	
+
+	// if n is the head
 	if (prev == NULL)
 	{
+		// update the head
 		list->head = n->next;
 	}
 	else
 	{
+		// update the previous node
 		prev->next = n->next;
 	}
-	n->next->prev = prev;
 
+	// if n is the tail
 	if (list->tail == n)
 	{
+		// update the tail
 		list->tail = prev;
-	}	
+	}
+	else
+	{
+		// update the next node
+		n->next->prev = prev;
+	}
 }
 
-bool DLL_IsEmpty (dll_t* list)
+bool DLL_IsEmpty(dll_t *list)
 {
 	if (list == NULL)
 	{
