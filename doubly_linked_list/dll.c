@@ -205,39 +205,22 @@ void DLL_Erase(dll_t *list, void *node)
 
 	dll_node_t *n = (dll_node_t *)node;
 
-	/*Remove node from a list algo */
-	/*Ref: https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux */
-
-	dll_node_t *prev = NULL, *walk = list->head;
-
-	while (walk != n)
+	if (n->next) // has a next node
 	{
-		prev = walk;
-		walk = walk->next;
+		n->next->prev = n->prev;
+	}
+	else // n is last item in list
+	{
+		list->tail = n->next;
 	}
 
-	// if n is the head
-	if (prev == NULL)
+	if (n->prev) // has a prev node
 	{
-		// update the head
+		n->prev->next = n->next;
+	}
+	else // n is first item in list
+	{
 		list->head = n->next;
-	}
-	else
-	{
-		// update the previous node
-		prev->next = n->next;
-	}
-
-	// if n is the tail
-	if (list->tail == n)
-	{
-		// update the tail
-		list->tail = prev;
-	}
-	else
-	{
-		// update the next node
-		n->next->prev = prev;
 	}
 }
 
